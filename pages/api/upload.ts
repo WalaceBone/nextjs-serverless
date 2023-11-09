@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const filename = `data-${timestamp}.csv`;
 
         // Write data to CSV file
-        const filePath = path.join('./tmp', filename);
+        const filePath = path.join('/tmp', filename);
         const csvWriter = createObjectCsvWriter({
             path: filePath,
             header: Object.keys(data).map(key => ({ id: key, title: key })),
