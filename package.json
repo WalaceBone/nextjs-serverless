@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/ssh2-sftp-client": "^9.0.3",
     "csv-writer": "^1.6.0",
     "next": "14.0.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "ssh2-sftp-client": "^9.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",
