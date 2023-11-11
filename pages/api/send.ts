@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import fs from 'fs';
 import path from 'path';
 import Client from 'ssh2-sftp-client';
+import bcrypt from 'bcrypt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
@@ -11,15 +12,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(405).json({ message: 'Method Not Allowed' });
     return;
   }
+  console.log(req.body);
+  
+
+  const {password} = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  console.log(password);
+  
+  // Comparing password with hashed password
+  const isMatch = await bcrypt.compare(password, hashedPassword);
+  console.log(isMatch); // true
 
   const { filename } = req.body;
-
+  console.log(filename);
   if (!filename) {
     res.status(400).json({ message: 'Bad Request: filename is required' });
     return;
   }
 
-  const filePath = path.join('/tmp', filename);
+  const filePath = path.join('./tmp', filename);
 
   if (!fs.existsSync(filePath)) {
     res.status(404).json({ message: 'File Not Found' });
@@ -30,13 +41,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await sftp.connect({
-      host: 'your-sftp-host',
-      port: 22,
-      username: 'your-sftp-username',
-      password: 'your-sftp-password',
+      host: process.env.SFTP_HOST,
+      port: process.env.SFTP_PORT || 22,
+      username: process.env.SFTP_USERNAME,
+      password: process.env.SFTP_PASSWORD,
     });
 
-    await sftp.put(filePath, `/remote/path/${filename}`);
+    await sftp.put(filePath, `/abbeal/${filename}`);
 
     res.status(200).json({ message: 'File successfully sent via SFTP' });
   } catch (err) {

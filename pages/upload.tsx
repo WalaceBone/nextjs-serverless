@@ -30,7 +30,7 @@ const UploadPage = () => {
                 body: JSON.stringify({ data }),
             });
             if (response.ok) {
-                console.log('Upload successful');
+                console.log(response);
             } else {
                 console.error('Upload failed');
             }

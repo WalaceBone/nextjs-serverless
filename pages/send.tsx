@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import bcrypt from "bcryptjs";
 
 const Send = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -8,15 +9,29 @@ const Send = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    const res = await fetch("/api/hello", {
+
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/:/g, '-').replace(/\..+/, '').split('T')[0];
+
+    const hashedPassword = await bcrypt.hash(password, "$2a$10$ZcOtZR.JnHAZiMl5eFpCF.");
+    const res = await fetch("/api/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password: hashedPassword, filename: `data-${timestamp}.csv` }),
     });
     const data = await res.json();
     console.log(data);
+    bcrypt.genSalt(10, function(err, salt) {
+    if (err) {
+        // handle error
+        console.error(err);
+        return;
+    }
+
+    console.log(salt); // This will log the generated salt
+});
   };
 
   return (

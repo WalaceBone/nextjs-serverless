@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Generate timestamp
         const now = new Date();
-        const timestamp = now.toISOString().replace(/:/g, '-').replace(/\..+/, '');
+        const timestamp = now.toISOString().replace(/:/g, '-').replace(/\..+/, '').split('T')[0];
 
         // Create filename with timestamp
         const filename = `data-${timestamp}.csv`;
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         await csvWriter.writeRecords([data]);
 
-        res.status(200).json({ message: 'Data written to CSV file.' });
+        res.status(200).json({ message: 'Data written to ' + filename + ' file.' });
     } else {
         res.status(405).json({ message: 'Method not allowed.' });
     }
