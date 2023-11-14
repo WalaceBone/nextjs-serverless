@@ -23,20 +23,20 @@ const Send = () => {
     });
     const data = await res.json();
     console.log(data);
-    bcrypt.genSalt(10, function(err, salt) {
-    if (err) {
+    bcrypt.genSalt(10, function (err, salt) {
+      if (err) {
         // handle error
         console.error(err);
         return;
-    }
+      }
 
-    console.log(salt); // This will log the generated salt
-});
+      console.log(salt); // This will log the generated salt
+    });
   };
 
   return (
-    <div>
-      <button onClick={() => setShowPopup(true)}>Send</button>
+    <div className="container">
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => setShowPopup(true)}>Send</button>
       {showPopup && (
         <div>
           <form onSubmit={handleSubmit}>
@@ -56,7 +56,7 @@ const Send = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </label>
-            <button type="submit">Submit</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Submit</button>
           </form>
         </div>
       )}
